@@ -1,0 +1,117 @@
+
+body {
+    /*background: #319bdb;*/
+    background-size: cover;
+
+}
+
+.container {
+    margin: auto;
+}
+
+.login-content .login-from {
+    background: #fefefe;
+    width: 388px;
+    height: 350px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 20px rgba(16, 16, 16, 1);
+}
+
+.login-content .header-title {
+    width: 100%;
+    height: 50px;
+    background: #4bade7;
+    color: #edffff;
+    position: relative;
+}
+
+.header-title h5.title-content {
+    width: 38%;
+    text-align: center;
+    line-height: 50px;
+    vertical-align: middle;
+
+}
+
+.header-title .hear-img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    right: 25px;
+    top: -26px;
+
+}
+
+.input-content {
+    border-radius: 0%;
+    width: 90%;
+    font-size: 14px;
+    background: #ffffff;
+    margin: auto;
+    border: 1px solid #BDC4C9;
+    display: block;
+    box-shadow: inset 0px 1px 0px #F1F0F1;
+    position: relative;
+    top: 32px;
+    margin-top: 20px;
+}
+
+.input-content:nth-child(1) {
+    background: url("../images/input_head.png") no-repeat 98% center;
+}
+
+.input-content:nth-child(2) {
+    background: url("../images/pass.png") no-repeat 98% center;
+}
+
+.input-content input.user-name {
+    border-radius: 0%;
+    padding-left: 10px;
+    font-size: 14px;
+    background: #ffffff;
+    border: none;
+    display: block;
+    width: 85%;
+    margin-left: 4px;
+    height: 38px;
+    outline: none;
+}
+
+.input-content .btn {
+    color: #fffffd;
+    height: 42px;
+    background-color: #4eabe7;
+}
+
+.prompt {
+    padding-bottom: 10px;
+    color: #5e5e5e;
+    text-align: center;
+    margin: auto;
+    width: 285px;
+    font-size: 12px;
+    position: relative;
+    top: 32px;
+    margin-top: 36px;
+}
+
+.login-buttom {
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    color: #999;
+    bottom: 0;
+    margin: auto;
+}
+
+.login-buttom .cut-rule {
+    width: 30%;
+    height: 2px;
+    /*background: linear-gradient(to right,#3596d3 10%,#388fc4 90%,#3596d3 10%);*/
+    margin-bottom: 2px;
+    margin: auto;
+}

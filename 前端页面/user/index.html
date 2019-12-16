@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>软咖权限管理系统</title>
+		<link rel="stylesheet" href="../public/plugin/layui/css/layui.css">
+		<script type="text/javascript" src="../public/plugin/jquery/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="../public/plugin/artDialog/jquery.artDialog.js?skin=blue"></script>
+		<script type="text/javascript" src="../public/plugin/artDialog/plugins/iframeTools.js"></script>
+		<script type="text/javascript" src="../public/js/common.js"></script>
+	</head>
+	<body>
+	<form class="layui-form" id="ajaxFrom" onsubmit="return false" action="indexlist.html">
+		<div class="layui-fluid" style="padding: 10px;">
+			<div class="layui-row" style="margin-bottom: 10px;">
+				<span class="layui-breadcrumb">
+				  <a href="">系统配置</a>
+				  <a href=""><cite>用户管理</cite></a>
+				</span>
+			</div>
+			<div class="layui-row">
+				<fieldset class="layui-elem-field site-demo-button" >
+				  <div style="margin-bottom: 10px;margin-left: 5px;margin-top: 5px;">
+				    <button onclick="add()" class="layui-btn layui-btn-sm layui-btn-primary">新增</button>
+				    <button onclick="batchDelete()" class="layui-btn layui-btn-sm layui-btn-danger">批量删除</button>
+				    <div style="float: right;margin-right: 10px;">
+				    	<input type="text" name="" class="layui-input" style="height:33px;display: inline-block;width: 230px;" placeholder="用户名" />
+				    	<input type="submit" class="layui-btn layui-btn-normal layui-btn-sm" value="搜索" onclick="ajaxLoad()"/>
+				    </div>
+				  </div>
+				</fieldset>
+			</div>
+			<div class="layui-row">
+				<table cellspacing="0" cellpadding="0" border="0" class="layui-table">
+					<thead>
+						<tr>
+							<th width="5%">
+								<input type="checkbox"  lay-filter="allCheck" name="all" lay-skin="primary">
+							</th>
+							<th >
+								编号
+							</th>	
+							<th >
+								用户名
+							</th>	
+							<th>
+								密码
+							</th>	
+							<th  width="20%">
+								操作
+							</th>	
+						</tr>
+					</thead>
+					<tbody id="tbody-main">
+						<tr>
+							<td>
+								<input type="checkbox" name="ids[1]" lay-skin="primary" title="" >
+							</td>
+							<td>1</td>
+							<td>admin</td>
+							<td>123</td>
+							<td>
+								<button class="layui-btn layui-btn-sm layui-btn-warm" onclick="editor()">编辑</button>
+								<button class="layui-btn layui-btn-sm layui-btn-danger" onclick="deleteOne()">删除</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="ids[2]" lay-skin="primary" title="" >
+							</td>
+							<td>1</td>
+							<td>admin</td>
+							<td>123</td>
+							<td>
+								<button class="layui-btn layui-btn-sm layui-btn-warm" onclick="editor()">编辑</button>
+								<button class="layui-btn layui-btn-sm layui-btn-danger" onclick="deleteOne()">删除</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!--绑定分页插件层-->
+				<div style="text-align: right;">
+					<div id="pager"></div>
+				</div>
+			</div>
+		</div> 
+		
+		<!--页码数-->
+		<input type="hidden" name="pageNum" id="pageNum" value="1" />
+		<!--显示条数-->
+		<input type="hidden" name="pageSize" id="pageSize" value="10" />
+	</form>
+	
+	<script src="../public/plugin/layui/layui.all.js"></script>
+		<script type="text/javascript">
+			
+			//新增操作
+			function add(){
+				s_open("新增用户","80%","90%","user/add.html");
+			}
+			//删除操作
+			function deleteOne(){
+				s_confirm("您是否删除此条数据？",function(){
+					 //确认按钮回调方法  
+				},function(){
+					 //取消按钮回调方法  
+				});
+			}
+			
+			//编辑操作
+			function editor(){
+				s_open("编辑用户","80%","90%","user/add.html");
+			}
+			
+			
+			var form;
+			//分页
+			var laypage;
+			var layer;
+			layui.use(['laypage','form','layer'], function(){
+				  laypage = layui.laypage;
+				  form = layui.form;
+				  layer=layui.layer;
+				  //全选操作
+				  form.on("checkbox(allCheck)",function(data){
+				  	 if(data.elem.checked){  //选中
+				  	 	$("#tbody-main input[type='checkbox']").prop('checked',true);
+				  	 	form.render('checkbox');
+				  	 }else{
+				  	 	$("#tbody-main input[type='checkbox']").prop('checked',false);
+				  	 	form.render('checkbox');
+				  	 }
+				  });
+			});
+			
+			//异步刷新列表方法
+			function ajaxLoad(){
+				$.ajax({
+					type:"get",
+					url:$("#ajaxFrom").attr("action"),
+					data:$("#ajaxFrom").serializeArray(), //获取表单中所有的数据
+					async:true,
+					success:function(resultHtml){
+					  $("#tbody-main").html(resultHtml);
+					  form.render('checkbox'); 	
+					  //执行一个laypage实例
+					  laypage.render({
+					    elem: 'pager' //注意，这里的 test1 是 ID，不用加 # 号
+					    ,curr:$("#pageNum").val() //当前页码数
+					    ,count:$("#count").val() //数据总数，从服务端得到
+					    ,limit:$("#pageSize").val()
+					    ,layout: ['count', 'prev', 'page', 'next', 'limit',  'skip']
+					    ,theme: '#FF5722',
+					     jump: function(obj, first){
+					      if(!first){
+					        $("#pageNum").val(obj.curr);
+					      }
+					    }
+					  });
+					}
+				});
+			}
+			
+			//批量删除
+			function batchDelete(){
+				
+				s_confirm("您是否批量删除这些数据？",function(){
+					
+					//确认按钮回调方法  
+				      //获取选择的复选框
+						var ids=$("#tbody-main input[type='checkbox']:checked");
+						
+						if(ids.length<=0){ 
+							layer.msg("请选择需要删除的数据！");
+							return;
+						}
+						
+						var idData=new Array();
+						for(var i=0;i<ids.length;i++){
+							idData.push($(ids[i]).val());
+						}
+						//将数组转换成字符
+						var strIds= idData.join(",");
+						$.ajax({
+							type:"post",
+							url:"",
+							data:{"ids":strIds},
+							async:true,
+							success:function(resultObj){
+								layer.msg("删除成功！");
+							}
+						});
+						
+				},function(){
+					 //取消按钮回调方法  
+				});
+				
+			
+			}
+			
+			$(function(){
+				ajaxLoad();
+			});
+		 </script>
+	</body>
+</html>
